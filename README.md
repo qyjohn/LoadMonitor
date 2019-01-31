@@ -11,8 +11,10 @@ java LoadMonitor eth0 xvda
 The following is the output format:
 
 ~~~
-System.out.println(cpuPercentUser + "\t" + cpuPercentSystem + "\t" + cpuPercentIdle + "\t" + cpuPercentIoWait
-			+ "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteBytes
-			+ "\t" + deltaNicRxBytes + "\t" + deltaNicTxBytes
-			+ "\t" + memFree + "\t" + memAvailable);
+cpuPercentUser + "\t" + cpuPercentSystem + "\t" + cpuPercentIdle + "\t" + cpuPercentIoWait
+	+ "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteBytes 
+	+ "\t" + deltaNicRxBytes + "\t" + deltaNicTxBytes
+	+ "\t" + memFree + "\t" + memAvailable
 ~~~
+
+The sampling period is 1 second.
