@@ -11,9 +11,9 @@ java LoadMonitor eth0 xvda
 The following is the output format:
 
 ~~~
-cpuPercentUser + "\t" + cpuPercentSystem + "\t" + cpuPercentIdle + "\t" + cpuPercentIoWait
-	+ "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteBytes 
-	+ "\t" + deltaNicRxBytes + "\t" + deltaNicTxBytes
-	+ "\t" + memFree (KB) + "\t" + memAvailable (KB)
+		System.out.println(cpuPercentUser + "\t" + cpuPercentSystem + "\t" + cpuPercentIdle + "\t" + cpuPercentIoWait
+			+ "\t" + deltaDiskReadIops + "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteIops + "\t" + deltaDiskWriteBytes
+			+ "\t" + deltaNicRxBytes + "\t" + deltaNicTxBytes
+			+ "\t" + memTotal + "\t" + memFree + "\t" + memAvailable);
 ~~~
 
