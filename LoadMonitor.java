@@ -19,9 +19,9 @@ public class LoadMonitor extends Thread
 	String nicRxPath, nicTxPath, diskPath, cpuPath, memPath;
 	long cpuUser, cpuSystem, cpuIdle, cpuIoWait, cpuTotal;
 	float cpuPercentUser, cpuPercentSystem, cpuPercentIdle, cpuPercentIoWait;
-	long diskReadSectors, diskWriteSectors, deltaDiskReadBytes, deltaDiskWriteBytes;
+	long diskReadIops, diskWriteIops, deltaDiskReadIops, deltaDiskWriteIops, diskReadSectors, diskWriteSectors, deltaDiskReadBytes, deltaDiskWriteBytes;
 	long nicRxBytes, nicTxBytes, deltaNicRxBytes, deltaNicTxBytes;
-	long memFree, memAvailable;
+	long memTotal, memFree, memAvailable;
 	
 	public LoadMonitor(String nic, String disk)
 	{
@@ -67,6 +67,11 @@ public class LoadMonitor extends Thread
 			String line;
 			int pos;
 			line = br.readLine();	// MemTotal
+                        pos = line.indexOf(" ");
+                        line = line.substring(pos).trim();
+                        pos = line.indexOf(" ");
+                        line = line.substring(0, pos).trim();   
+                        memTotal = Long.parseLong(line);         
 			line = br.readLine();  // MemFree
 			pos = line.indexOf(" ");
 			line = line.substring(pos).trim();
@@ -83,8 +88,14 @@ public class LoadMonitor extends Thread
 			
 			// Get disk I/O
 			String[] diskInfo = readOneLine(diskPath).trim().split("\\s+");
+                        long newDiskReadIops  = Long.parseLong(diskInfo[0]);
+                        long newDiskWriteIops = Long.parseLong(diskInfo[4]);
 			long newDiskReadSectors  = Long.parseLong(diskInfo[2]);
 			long newDiskWriteSectors = Long.parseLong(diskInfo[6]);
+			deltaDiskReadIops = newDiskReadIops - diskReadIops;
+			diskReadIops = newDiskReadIops;
+			deltaDiskWriteIops = newDiskWriteIops - diskWriteIops;
+			diskWriteIops = newDiskWriteIops;
 			deltaDiskReadBytes    = 512 * (newDiskReadSectors - diskReadSectors);
 			diskReadSectors  = newDiskReadSectors;
 			deltaDiskWriteBytes   = 512 * (newDiskWriteSectors - diskWriteSectors);
@@ -107,9 +118,9 @@ public class LoadMonitor extends Thread
 	public void print()
 	{
 		System.out.println(cpuPercentUser + "\t" + cpuPercentSystem + "\t" + cpuPercentIdle + "\t" + cpuPercentIoWait
-			+ "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteBytes
+			+ "\t" + deltaDiskReadIops + "\t" + deltaDiskReadBytes + "\t" + deltaDiskWriteIops + "\t" + deltaDiskWriteBytes
 			+ "\t" + deltaNicRxBytes + "\t" + deltaNicTxBytes
-			+ "\t" + memFree + "\t" + memAvailable);
+			+ "\t" + memTotal + "\t" + memFree + "\t" + memAvailable);
 	}
 	
 	public String readOneLine(String file)
